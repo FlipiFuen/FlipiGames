@@ -1,0 +1,8 @@
+{% extends "admin/base_site.html" %}
+
+{% block userlinks %}
+    {% if user.is_superuser %}
+        <a href="{% url 'flipigames:admin_gestion' %}" style="color: #f0d43a; font-weight: bold;">Panel de Estadísticas</a>
+    {% endif %}
+    {{ block.super }}
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends "flipigames/base.html" %}
+{% load static %}
+
+{% block title %}Juego del Ahorcado{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h1>Juego del Ahorcado</h1>
+    {% if primera_vez %}
+        <!-- Pantalla de inicio -->
+        <img src="{% static 'imagenes/ahorcado/ahorcado0.png' %}" alt='Horca' class="img-fluid my-4" style="max-height: 400px;">
+        <h1 class="text-white display-4 fw-bold">¡AHORCADO!</h1>
+        <p class="text-success">¿Listo para empezar?</p>
+                
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary btn-lg">Jugar</button>
+        </form>
+    {% else %}
+        {% if juego_ganado %}
+            <!-- Pantalla de victoria -->
+            <div class="mt-4">
+                <h2 class="text-success fw-bold">¡Felicidades, has ganado!</h2>
+                <p class="fs-4">La palabra era:</p>
+                <p class="display-4 text-info bg-primary-subtle" style="letter-spacing: 0.3em;">{{ palabra }}</p>
+                <img src="{% static 'imagenes/ahorcado/ahorcado0.png' %}" alt="horca" class="img-fluid my-4" style="max-height: 400px;">
+                <div class="mt-4">
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" name="volver_jugar" value="1" class="btn btn-primary btn-lg">Volver a jugar</button>
+                    </form>
+                </div>
+            </div>
+        {% else %}
+            <!-- Pantalla del juego -->
+            <div class="row align-items-center mt-4">
+                <!-- Columna del teclado -->
+                <div class="col-md-3">
+                    <div class="p-3 rounded" style="background-color: #acd9f8">
+                        <h5 class="mb-3">Elige una letra</h5>
+                        <form method="post">
+                            {% csrf_token %}
+                            {% for letra in "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ" %}
+                                {% if letra in letras_usadas %}
+                                    <!-- Si la letra ya fue usada la marcamos en rojo si es incorrecta y en verde si es correcta y la deshabilitamos -->
+                                    <button type="submit" name="letra" value="{{ letra }}" class="btn {% if letra in palabra %} btn-success {% else %} btn-danger {% endif %} m-1" style="width: 45px;" disabled> {{ letra }}</button>
+                                {% else %}
+                                    <!-- Botón para letra disponible -->
+                                    <button type="submit" name="letra" value="{{ letra }}" class="btn btn-outline-primary m-1" style="width: 45px;">{{ letra }}</button>
+                                {% endif %}
+                            {% endfor %}
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Columna central del juego -->
+                <div class="col-md-6">
+                    <img src="{% static 'imagenes/ahorcado/ahorcado' %}{{ fallos }}.png" alt='Horca' class="img-fluid my-4" style="max-height: 400px;">
+                    {% if juego_perdido %}
+                        <div class="mt-4">
+                            <h2 class="text-danger fw-bold">¡Lo siento, has perdido!</h2>
+                            <p class="fs-4">La palabra era:</p>
+                            <p class="display-4 text-info bg-primary-subtle" style="letter-spacing: 0.3em;">{{ palabra }}</p>
+                            <div class="mt-4">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" name="volver_jugar" value="1" class="btn btn-primary btn-lg">Volver a jugar</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Columna de información -->
+                <div class="col-md-3">
+                    <div class="p-3 rounded" style="background-color: #acd9f8">
+                        <h5 class="mb-3">Intentos restantes: {{ intentos_restantes }}</h5>
+                        <hr>
+                        <h5 class="mb-3">Letras usadas:</h5>
+                        <div class="fs-5">
+                            {% if letras_usadas %}
+                                {% for letra in letras_usadas %}
+                                    {% if letra not in palabra %}
+                                        <span class="badge bg-danger me-1">{{ letra }}</span>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                <p class="text-muted small">Ninguna todavía</p>
+                            {% endif %}
+                        </div>
+                        <!-- Marcador del Torneo -->
+                        {% if partida_torneo %}
+                            <div class="mt-4 p-3 rounded"  style="background-color: #e3f2fd;">
+                                <h5 class="mb-3 text-primary">Marcador del Torneo</h5>
+                                <ul class="list-group list-group-flush text-start">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                                        Partidas: <span class="badge bg-primary rounded-pill">{{ participacion_torneo.juegos_ahorcado|default:"0" }}</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                                        Puntos: <span class="badge bg-primary rounded-pill">{{ participacion_torneo.puntos_ahorcado|default:"0" }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div> <!-- Fila principal -->
+
+            <!-- Contenedor de la palabra oculta -->
+            <div class="text-center p-3 rounded" style="background-color: #7ac1f5">
+                <!-- Mostramos la palabra oculta -->
+                <div class="my-4">
+                    <p class="display-6" style="letter-spacing: 0.5em;">
+                        {% for letra in palabra %}
+                            {% if letra in letras_acertadas %}
+                                {{ letra }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        {% endfor %}
+                    </p>
+                </div>
+            </div>
+        {% endif %} <!-- Pantalla del juego -->
+    {% endif %} <!-- Pantalla de inicio -->
+</div> <!-- Contenedor principal -->
+    
+{% endblock %}

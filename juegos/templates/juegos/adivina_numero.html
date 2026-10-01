@@ -1,0 +1,185 @@
+{% extends "flipigames/base.html" %}
+{% load static %}
+
+{% block title %}Adivina el Número{% endblock %}
+
+{% block extra_css %}
+<style>
+    .digit-input { width: 60px; height: 60px; text-align: center; font-size: 1.8rem; font-weight: bold; }
+    .result-digit {
+        display: inline-block;
+        width: 35px;
+        height: 35px;
+        line-height: 35px;
+        text-align: center;
+        color: white;
+        font-weight: bold;
+        border-radius: 5px;
+        margin: 2px;
+    }
+    .bg-posicion_correcta { background-color: #28a745; } /* Verde */
+    .bg-digito_correcto { background-color: #ffc107; } /* Amarillo */
+    .bg-incorrecto { background-color: #dc3545; } /* Rojo */
+    .digito-btn.disabled {
+        pointer-events: none;
+        opacity: 0.65;
+    }
+    #contador-tiempo {
+        font-weight: bold;
+        color: #0d6efd;
+        font-size:1.2rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <div class="text-center">
+        <h1>Adivina el Número</h1>
+        {% if primera_vez %}
+            <!-- Pantalla de inicio -->
+            <img src="{% static 'imagenes/adivina.png' %}" alt="adivina" class="img-fluid my-4" style="max-height: 400px;">
+            <h1 class="text-white display-4 fw-bold">¡ADIVINA EL NÚMERO!</h1>
+            <p class="text-success">¿Listo para empezar?</p>
+            <p class="text-white">Intenta adivinar el número de 4 cifras que no se repiten</p>
+
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" name="jugar" class="btn btn-primary btn-lg">Jugar</button>
+            </form>
+        {% else %}
+            {% if juego_ganado %}
+                <!-- Pantalla de victoria -->
+                <div class="mt-4">
+                    <h2 class="text-success fw-bold">¡Felicidades, has ganado!</h2>
+                    <p class="fs-4">El número era:</p>
+                    <p class="display-4 text-info bg-primary-subtle" style="letter-spacing: 0.3em;">{{ numero_secreto|join:"" }}</p>
+                    <p class="fs-5">Lo has conseguido en <strong>{{ intentos }}</strong> intentos
+                        {% if tiempo_partida is not None %}
+                            y en <strong>{{ tiempo_partida|floatformat:2 }}</strong> segundos
+                        {% endif %}
+                    </p>
+                    <img src="{% static 'imagenes/adivina.png' %}" alt="adivina" class="img-fluid my-4" style="max-height: 400px;">
+                    <div class="mt-4">
+                        <form method="post">
+                            {% csrf_token %}
+                            <button type="submit" name="volver_jugar" value="1" class="btn btn-primary btn-lg">Volver a Jugar</button>
+                        </form>
+                    </div>
+                </div>
+            {% else %}
+                <!-- Pantalla del juego -->
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row justify-content-center align-items-start mt-4 g-4">
+                        <!-- Columna del teclado numérico -->
+                        <div class="col-md-3">
+                            <div class="p-3 rounded" style="background-color:#e3f2fd">
+                                <div>
+                                    {% for fila in teclado %}
+                                        <div class="d-flex justify-content-center gap-2 mb-2">
+                                            {% for digito in fila %}
+                                                <button type="submit" name="digito" value="{{ digito }}" class="btn btn-outline-primary digit-btn" {% if digito in jugada_actual %}disabled{% endif %}>{{ digito }}</button>
+                                            {% endfor %}
+                                        </div>
+                                    {% endfor %}
+                                    <!-- Fila para 0, limpiar y borrar -->
+                                    <div class="d-flex justify-content-center gap-2 mb-2">
+                                        <button type="submit" name="accion" value="limpiar" class="btn btn-warning">C</button>
+                                        <button type="submit" name="digito" value="0" class="btn btn-outline-primary digit-btn" {% if '0' in jugada_actual %}disabled{% endif %}>0</button>
+                                        <button type="submit" name="accion" value="borrar" class="btn btn-danger">&larr;</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Columna central -->
+                        <div class="col-md-5">
+                            <div class="mb-3">
+                                <img src="{% static 'imagenes/adivina.png' %}" alt="adivina" class="img-fluid my-4" style="max-height: 300px;">
+                                <h5 class="mb-3">Introduce un número de 4 dígitos</h5>
+                                <div id="input-display" class="d-flex justify-content-center gap-2 mb-3">
+                                    <input type="text" class="form-control digit-input" value="{{ jugada_actual.0|default:'' }}" readonly>
+                                    <input type="text" class="form-control digit-input" value="{{ jugada_actual.1|default:'' }}" readonly>
+                                    <input type="text" class="form-control digit-input" value="{{ jugada_actual.2|default:'' }}" readonly>
+                                    <input type="text" class="form-control digit-input" value="{{ jugada_actual.3|default:'' }}" readonly>
+                                </div>
+                            </div>
+                            <button type="submit" name="accion" value="enviar" class="btn btn-success btn-lg mt-3" {% if jugada_actual|length != 4 %}disabled{% endif %}>Enviar</button>
+                        </div>
+                        <!-- Columna de información -->
+                        <div class="col-md-4">
+                            <div class="p-3 rounded" style="background-color: #acd9f8">
+                                <h5 class="mb-3">Marcador</h5>
+                                <ul class="list-group list-group-flush text-start">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                                        Intentos: <span class="badge bg-primary rounded-pill">{{ intentos|default:"0" }}</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                                        Tiempo: <span id="contador-tiempo">00:00</span>
+                                    </li>
+                                </ul>
+                                <!-- Marcador del Torneo -->
+                                {% if partida_torneo %}
+                                    <div class="mt-4 p-3 rounded"  style="background-color: #e3f2fd;">
+                                        <h5 class="mb-3 text-primary">Marcador del Torneo</h5>
+                                        <ul class="list-group list-group-flush text-start">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                                                Partidas: <span class="badge bg-primary rounded-pill">{{ participacion_torneo.juegos_adivina|default:"0" }}</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                                                Intentos: <span class="badge bg-primary rounded-pill">{{ participacion_torneo.intentos_adivina|default:"0" }}</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                                                Tiempo: <span class="badge bg-primary rounded-pill">{{ participacion_torneo.tiempo_adivina|floatformat:2 }}</span>
+                                            </li>
+                                        </ul>
+                                        <p class="small text-muted mt-2">Sólo se guardará tu mejor puntuación (menos intentos)</p>
+                                    </div>
+                                {% endif %}
+
+                                <!-- Historial de jugadas -->
+                                <div class="mt-4">
+                                    <h5 class="mb-3">Historial de Jugadas</h5>
+                                    {% if historial_jugadas %}
+                                        <ul class="list-group">
+                                            {% for item in historial_jugadas reversed %}
+                                                <li class="list-group-item bg-transparent border-primary-subtle">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div class="fw-bold fs-5">
+                                                            {% for res in item.resultado_digitos %}
+                                                                <span class="result-digit {% if res.estado == 'acierto' %}bg-posicion_correcta
+                                                                    {% elif res.estado == 'coincidencia' %}bg-digito_correcto{% else %}bg-incorrecto{% endif %}">{{ res.digito }}</span>
+                                                            {% endfor %}
+                                                        </div>
+                                                        <div>
+                                                            <span class="badge bg-success me-1" title="Aciertos">{{ item.aciertos }}</span>
+                                                            <span class="badge bg-warning text-dark" title="Coincidencias">{{ item.coincidencias }}</span>                 
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                </div>
+                            </div> <!-- Div del marcador -->
+                        </div> <!-- Columna de información --> 
+                    </div> <!-- Fin de la fila -->
+                </form>  
+            {% endif %} <!-- Pantalla del juego -->
+        {% endif %} <!-- Pantalla de inicio -->
+    </div> <!-- Div principal -->
+
+{% endblock %}
+
+{% block extra_js %}
+    {% if not primera_vez and not juego_ganado and start_time_adivina %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            const startRaw = parseFloat('{{ start_time_adivina}}'.replace(',', '.'));
+
+            // Llamamos a la función genérica que está en base.html
+            iniciarCronometro(startRaw, 'contador-tiempo');
+        });
+    </script>
+    {% endif %}
+{% endblock %}

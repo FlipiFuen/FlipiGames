@@ -1,0 +1,262 @@
+{% extends 'flipigames/base.html' %}
+
+{% block title %}Torneo Semanal | FlipiGames{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold">Torneo Semanal FlipiGames</h1>
+            <p class="lead text-muted">Compite cada semana por el primer puesto. Semana {{ semana }} del año {{ anio_actual }}</p>
+            <a href="{% url 'torneo:reglas_torneo' %}" class="btn btn-outline-primary mt-3">
+                <i class="bi bi-info-circle me-2"></i>Ver Reglas del Torneo
+            </a>
+        </div>
+
+        <div class="alert alert-info text-center" role="alert">
+            <h4 class="alert-heading">¡Campeón de la Semana {{ semana_anterior }} del año {{ anio_actual }}!</h4>
+            {% if campeon_semana %}
+                <p class="mb-0">¡Felicidades a <strong>{{ campeon_semana.user.username }}</strong> por su increíble desempeño en el torneo!</p>
+            {% else %}
+                <p class="mb-0">La semana anterior no tuvo campeón. ¡Participa esta semana para ser el próximo campeón!</p>
+            {% endif %}         
+        </div>
+
+        <!-- Salón de la fama -->
+        <div class="row text-center mb-5 g-4">
+            <h2 class="fw-bold mb-4">Salón de la Fama - Mejores Puntuaciones</h2>
+            <!-- Mejor en Ahorcado -->
+            <div class="col-md-4">
+                <div class="card bg-light shadow-sm h-100">
+                    <div class="card-header bg-info text-white">
+                        <h4><i class="bi bi-trophy-fill"></i> Ahorcado</h4>
+                    </div>
+                    <div class="card-body">
+                        {% if mejor_ahorcado %}
+                            <h5 class="card-title">{{ mejor_ahorcado.user.username }}</h5>
+                            <p class="card-text display-6 fw-bold">{{ mejor_ahorcado.puntos_ahorcado }} <small class="text-muted fs-6">puntos</small></p>
+                            <p class="card-text"><small class="text-muted">Conseguido en la semana {{ mejor_ahorcado.semana }} del año {{ mejor_ahorcado.anio }}</small></p>
+                        {% else %}
+                            <p class="card-text text-muted">Aún no hay récords</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <!-- Mejor en PPTLS -->
+            <div class="col-md-4">
+                <div class="card bg-light shadow-sm h-100">
+                    <div class="card-header bg-warning text-dark"><h4><i class="bi bi-trophy-fill"></i> PIEDRA-PAPEL-TIJERAS-LAGARTO-SPOCK</h4></div>
+                    <div class="card-body">
+                        {% if mejor_piedra %}
+                            <h5 class="card-title">{{ mejor_piedra.user.username }}</h5>
+                            <p class="card-text display-6 fw-bold">{{ mejor_piedra.puntos_piedra }} <small class="text-muted fs-6">puntos</small></p>
+                            <p class="card-text"><small class="text-muted">Conseguido en la semana {{ mejor_piedra.semana }} del año {{ mejor_piedra.anio }}</small></p>
+                        {% else %}
+                            <p class="card-text text-muted">Aún no hay récords</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <!-- Mejor en Adivina el Número -->
+            <div class="col-md-4">
+                <div class="card bg-light shadow-sm h-100">
+                    <div class="card-header bg-success text-white"><h4><i class="bi bi-trophy-fill"></i> Adivina el Número</h4></div>
+                    <div class="card-body">
+                        {% if mejor_adivina %}
+                            <h5 class="card-title">{{ mejor_adivina.user.username }}</h5>
+                            <p class="card-text fw-bold">{{ mejor_adivina.intentos_adivina }} <small class="text-muted">intentos</small> en {{ mejor_adivina.tiempo_adivina }}s</p>
+                            <p class="card-text"><small class="text-muted">Conseguido en la semana {{ mejor_adivina.semana }} del año {{ mejor_adivina.anio }}</small></p>
+                        {% else %}
+                            <p class="card-text text-muted">Aún no hay récords</p>
+                        {% endif %}
+                    </div>        
+                </div>
+            </div>
+        </div>
+        {% if participante_actual %}
+            <!-- Formulario de búsqueda -->
+            <form method="get" class="mb-4">
+                <div class="row g-2 align-items-center">
+                    <div class="col-md-3">
+                        <label for="q" class="visually-hidden">Buscar por semana</label>
+                        <input type="number" name="q" id="q" class="form-control" placeholder="Semana" value = "{{ q }}" min="1" max="53">
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label for="anio" class="visually-hidden">Buscar por año</label>
+                        <input type="number" name="anio" id="anio" class="form-control" placeholder="Año" value="{{ anio_mostrar }}" min="2025" max="2100">
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="jugador" class="visually-hidden">Buscar por nombre exacto de jugador</label>
+                        <select id="jugador" name="jugador" class="form-select">
+                            <option value="">Todos los jugadores</option>
+                            {% for participante in todos_participantes %}
+                                <option value="{{ participante.user.username }}"{% if participante.user.username == jugador %} selected{% endif %}>
+                                    {{ participante.user.username }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <select name="juego" class="form-select">
+                            <option value="general" {% if juego_seleccionado == 'general' %} selected{% endif %}>General</option>
+                            <option value="ahorcado" {% if juego_seleccionado == 'ahorcado' %} selected{% endif %}>Ahorcado</option>
+                            <option value="piedra" {% if juego_seleccionado == 'piedra' %} selected{% endif %}>Piedra-Papel-Tijera-Lagarto-Spock</option>
+                            <option value="adivina" {% if juego_seleccionado == 'adivina' %} selected{% endif %}>Adivina el Número</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 d-grid gap-2 d-md-flex">
+                        <button type="submit" class="btn btn-primary">Buscar</button>
+                        <a href="{% url 'torneo:torneo' %}" class="btn btn-secondary">Limpiar</a>
+                    </div>
+                </div>
+            </form>
+            <div class="row g-4">
+                <!-- Columna de estado del jugador y juegos -->
+                <div class="col-lg-4">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="my-0 fw-normal">Tu Estado</h4>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled mt-3 mb-4">
+                                <li><strong>Puntos en Ahorcado:</strong> {{ participante_actual.puntos_ahorcado|default:"0"}}</li>
+                                <li><strong>Puntos en Piedra-Papel-Tijeras-Lagarto-Spock:</strong> {{ participante_actual.puntos_piedra|default:"0" }}</li>
+                                <hr>
+                                <li><strong>Partidas a Ahorcado:</strong> {{ participante_actual.juegos_ahorcado|default:"0" }}</li>
+                                <li><strong>Partidas a Piedra-Papel-Tijeras_lagarto-Spock:</strong> {{ participante_actual.juegos_piedra|default:"0" }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-success text-white">
+                            <h4 class="my-0 fw-normal">¡A Jugar!</h4>
+                        </div>
+                        <div class="card-body text-center">
+                            <p class="text-warning">Suma puntos para el torneo</p>
+                            <a href="{% url 'juegos:ahorcado_modo' modo_juego='torneo' %}" class="btn btn-lg btn-outline-primary mb-2 w-100">Jugar Ahorcado</a>
+                            <a href="{% url 'juegos:pptls_modo' modo_juego='torneo' %}" class="btn btn-lg btn-outline-primary mb-2 w-100">Jugar Piedra-Papel-Tijeras-Lagarto-Spock</a>
+                            <a href="{% url 'juegos:adivina_numero_modo' modo_juego='torneo' %}" class="btn btn-lg btn-outline-primary mb-2 w-100">Jugar Adivina el Número</a>
+                        </div>
+                    </div>
+                </div> <!-- Fin de la columna de estado del jugador y juegos -->
+
+                <!-- Columna de clasificación -->
+                <div class="col-lg-8">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-dark text-white">
+                            <h4 class="my-0 fw-normal">
+                                Clasificación - {% if juego_seleccionado == "ahorcado" %}Ahorcado
+                                {% elif juego_seleccionado == "piedra" %}Piedra-Papel-Tijera-Lagarto-Spock
+                                {% elif juego_seleccionado == "adivina" %}Adivina el Número
+                                {% else %}Torneo{% endif %}
+                            </h4>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover mb-0">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Jugador</th>
+                                        {% if juego_seleccionado == "ahorcado" %}
+                                            <th scope="col">Puntos</th>
+                                            <th scope="col">Partidas</th>
+                                        {% elif juego_seleccionado == "piedra" %}
+                                            <th scope="col">Puntos</th>
+                                            <th scope="col">Partidas</th>
+                                        {% elif juego_seleccionado == "adivina" %}
+                                            <th scope="col">Intentos</th>
+                                            <th scope="col">Tiempo</th>
+                                            <th scope="col">Partidas</th>
+                                        {% else %}
+                                            <th scope="col">Puntos Totales</th>
+                                            <th scope="col">Puntos Ahorcado</th>
+                                            <th scope="col">Puntos Piedra-Papel-Tijera-Lagarto-Spock</th>
+                                        {% endif %}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for participante in page_obj %}
+                                        <tr class="{% if participante.user == user %}table-info{% endif %}">
+                                            <th scope="row">{{ participante.puesto }}</th>
+                                            <td>{{ participante.user.username }}</td>
+                                            {% if juego_seleccionado == "ahorcado" %}
+                                                <td><strong>{{ participante.puntos_ahorcado|default:"0" }}</strong></td>
+                                                <td>{{ participante.juegos_ahorcado|default:"0" }}</td>
+                                            {% elif juego_seleccionado == "piedra" %}
+                                                <td><strong>{{ participante.puntos_piedra|default:"0" }}</strong></td>
+                                                <td>{{ participante.juegos_piedra|default:"0" }}</td>
+                                            {% elif juego_seleccionado == "adivina" %}
+                                                <td><strong>{{ participante.intentos_adivina|default:"0" }}</strong></td>
+                                                <td>{{ participante.tiempo_adivina|floatformat:1 }}</td>
+                                                <td>{{ participante.juegos_adivina|default:"0" }}</td>
+                                            {% else %}
+                                                <td><strong>{{ participante.total_puntos|default:"0" }}</strong></td>
+                                                <td>{{ participante.puntos_ahorcado|default:"0" }}</td>
+                                                <td>{{ participante.puntos_piedra|default:"0" }}</td>
+                                            {% endif %}
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="5" class="text-center text-muted">No se encontraron resultados para tu búsqueda</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div> <!-- Fin de la tabla -->
+                    </div> <!-- Fin de la tarjeta de clasificación -->
+
+                    <!-- Botón para ver estadísticas del torneo -->
+                    <div class="text-center mt-4">
+                        <a href="{% url 'torneo:estadisticas_torneo' %}" class="btn btn-info text-white mt-2">
+                            <i class="bi bi-bar-chart-line-fill"></i> Estadísticas del Torneo
+                        </a>
+                    </div>                 
+                </div> <!-- Fin de la columna de clasificación -->
+            </div> <!-- Fin de la fila de columnas -->
+
+            <!-- Paginación -->
+            {% if page_obj.has_other_pages %}
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center mt-4">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link text-primary" 
+                                    href="?page={{ page_obj.previous_page_number }}
+                                    {% if q %}&q={{ q }}{% endif %}
+                                    {% if anio_mostrar %}&anio={{ anio_mostrar }}{% endif %}
+                                    {% if jugador %}&jugador={{ jugador }}{% endif %}
+                                    {% if juego_seleccionado != 'general' %}&juego={{ juego_seleccionado }}{% endif %}" aria-label="Previous">
+                                    Anterior
+                                </a>
+                            </li>
+                        {% endif %}
+                        <li class="page-item disabled"><span class="page-link">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span></li>
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link text-primary"
+                                    href="?page={{ page_obj.next_page_number }}{% if q %}&q={{ q }}{% endif %}
+                                    {% if anio_mostrar %}&anio={{ anio_mostrar }}{% endif %}
+                                    {% if jugador %}&jugador={{ jugador }}{% endif %}
+                                    {% if juego_seleccionado != 'general' %}&juego={{ juego_seleccionado }}{% endif %}" aria-label="Next">
+                                    Siguiente
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+            {% endif %} 
+        {% else %}
+            <!-- El usuario no está registrado en el torneo -->
+            <div class="p-5 mb-4 bg-light rounded-3 text-center">
+                <div class="container-fluid py-5">
+                    <h1 class="display-5 fw-bold">¡Únete al Torneo!</h1>
+                    <p class="fs-4">Parece que todavia no te has apuntado al torneo de esta semana</p>
+                    <p>Regístrate ahora y empieza a competir por el primer puesto. ¡No te quedes atrás!</p>
+                    <div>
+                        <a href="{% url 'torneo:registro_torneo' %}" class="btn btn-primary btn-lg" type="button">Apuntarme ahora</a>
+                    </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

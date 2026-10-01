@@ -1,0 +1,21 @@
+{% extends 'flipigames/base.html' %}
+{% load static %}
+
+{% block title %}FlipiGames{% endblock %}
+
+{% block extra_css %}
+    <style>
+        body{
+            min-height: 100vh; /* Aseguramos que el body tenga como mínimo la altura de la ventana */
+            background-image: url("{% static 'imagenes/fondo_home.png' %}");
+            background-size: 100% 100%;
+            background-position:center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    
+{% endblock %}

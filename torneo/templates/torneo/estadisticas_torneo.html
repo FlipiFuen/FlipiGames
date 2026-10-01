@@ -1,0 +1,85 @@
+{% extends 'flipigames/base.html' %}
+
+{% block title %}Estadísticas del Torneo | FlipiGames{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold">Estadísticas del Torneo</h1>
+        <p class="lead text-muted">Competición de la semana {{ semana_mostrar }} del año {{ anio_mostrar }}</p>
+    </div>
+
+    <!-- Formulario de búsqueda y paginación por año y semana -->
+    <div class="d-flex justify-content-center align-items-center mb-4">
+        {% if semana_anterior %}
+            <a href="?anio={{ anio_mostrar }}&semana={{ semana_anterior }}" class="btn btn-outline-primary me-3">&laquo; Semana Anterior</a>
+        {% endif %}
+
+        <form method="get" class="d-flex gap-2">
+            <input type="number" name="semana" class="form-control" placeholder="Ir a semana..." value="{{ semana_mostrar }}" min="1" max="{{ semana_actual }}">
+            <input type="number" name="anio" class="form-control" placeholder="Año" value="{{ anio_mostrar }}" min="2025" max="2100">
+            <button type="submit" class="btn btn-primary ms-2">Ir</button>
+        </form>
+        
+        {% if semana_siguiente %}
+            <a href="?anio={{ anio_mostrar }}&semana={{ semana_siguiente }}" class="btn btn-outline-primary ms-3">Siguiente Semana &raquo;</a>
+        {% endif %}
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        <!-- Gráfica de barras Top10 -->
+        <div class="col-lg-10">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="my-0 fw-normal">Top 10 Jugadores</h4>
+                </div>
+                <div class="card-body text-center p-4">
+                    {% if grafica_barras %}
+                        <img src="data:image/png;base64,{{ grafica_barras }}" class="img-fluid" alt="Gráfica Top10 Jugaodres">
+                    {% else %}
+                        <p class="text-muted">Aún no hay suficientes datos para mostrar el top 10</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 justify-content-center mt-4">
+        <!-- Gráfica de Torta: Distribución de puntos -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h4 class="my-0 fw-normal">Distribución de Puntos por Juego</h4>
+                </div>
+                <div class="card-body text-center p-4">
+                    {% if grafica_torta %}
+                        <img src="data:image/png;base64,{{ grafica_torta }}" class="img-fluid" style="max-height: 400px;" alt="Gráfica de torta">
+                    {% else %}
+                        <p class="text-muted">Aún no hay puntos registrados en el torneo</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráfico de líneas del juego Adivina el Número -->
+    <div class="row g-4 justify-content-center mt-4">
+        {% if grafica_adivina %}
+            <div class="col-lg-10">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-info text-white">
+                        <h4 class="my-0 fw-normal">Mejores Jugadores de Adivina el Número</h4>
+                    </div>
+                    <div class="card-body text-center p-4">
+                        <img src="data:image/png;base64,{{ grafica_adivina }}" class="img-fluid" alt="Gráfico de Adivina el Número">
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{% url 'torneo:torneo' %}" class="btn btn-secondary">Volver</a>
+    </div>
+</div> <!-- Div principal -->
+{% endblock %}

@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.log
+
+# Entornos virtuales
+.venv/
+venv/
+env/
+.myvenv/
+
+# Configuración local y secretos
+.env
+.env.*
+!.env.example
+
+# Django y archivos locales
+db.sqlite3
+media/
+staticfiles/
+
+# Pruebas y herramientas
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db

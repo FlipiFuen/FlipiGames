@@ -1,0 +1,110 @@
+{% extends 'flipigames/base.html' %}
+
+{% block title %}Panel de Administración | FlipiGames{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold">Panel de Administración</h1>
+            <p class="lead text-muted">Estadísticas y visión general de la aplicación</p>
+        </div>
+
+        <!-- Tarjeta de Estadisticas Generales -->
+        <div class="row text-center g-4 mb-5">
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">Total de Usuarios</h5>
+                        <p class="card-text display-4 fw-bold">{{ total_usuarios }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-success">Participaciones en Torneos</h5>
+                        <p class="card-text display-4 fw-bold">{{ total_participaciones }}</p>
+                        <small class="text-muted">en {{ total_semanas }} semanas</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-info">Inscritos al Torneo Semana Actual</h5>
+                        <p class="card-text display-4 fw-bold">{{ participaciones_actuales }}</p>
+                        <small class="text-muted">Semana {{ semana_actual }} </small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100 border-warning">
+                    <div class="card-body">
+                        <h5 class="card-tittle text-warning">Jugador con más Torneos Ganados</h5>
+                        {% if campeon_global %}
+                            <p class="card-text display-6 fw-bold">{{ campeon_global.usuario.username }}</p>
+                            <small class="text-muted">
+                                {{ campeon_global.victorias }} torneo{{ campeon_global.victorias|pluralize }} ganado{{ campeon_global.victorias|pluralize}}
+                            </small>
+                        {% else %}
+                            <p class="text-muted">Aún no hay campeones</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div> <!-- Estadisticas -->
+
+        <!-- Gráficos -->
+        <div class="row g-4">
+            <!-- Gráfico de Nuevos Usuarios -->
+            <div class="col-lg-12">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h4 class="my-0 fw-normal">Nuevos Usuarios por Día</h4>
+                    </div>
+                    <div class="card-body text-center">
+                        {% if grafico_usuarios %}
+                            <img src="data:image/png;base64,{{ grafico_usuarios }}" alt="Gráfico de Nuevos Usuarios" class="img-fluid">
+                        {% else %}
+                            <p class="text-muted">No hay suficientes datos para generar el gráfico.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráfico de Participaciones en Torneos -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h4 class="my-0 fw-normal">Participantes por Semana en Torneos</h4>
+                </div>
+                <div class="card-body text-center">
+                    {% if grafico_torneos %}
+                        <img src="data:image/png;base64,{{ grafico_torneos }}" alt="Gráfico de Participantes en Torneos" class="img-fluid">
+                    {% else %}
+                        <p class="text-muted">No hay datos de torneos para mostrar.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Gráfico de Juegos más jugados en modo libre -->
+            <div class="col-lg-12">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h4 class="my-0 fw-normal">Juegos más jugados en Modo Libre</h4>
+                    </div>
+                    <div class="card-body text-center">
+                        {% if grafico_juegos_libres %}
+                            <img src="data:image/png;base64,{{ grafico_juegos_libres }}" alt="Gráfico Juegos mas jugados" class="img-fluid">
+                        {% else %}
+                            <p class="text-muted">No hay datos de partidas para mostrar</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div> <!-- Gráficos-->
+    </div>
+{% endblock %}

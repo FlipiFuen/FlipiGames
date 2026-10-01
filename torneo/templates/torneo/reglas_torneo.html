@@ -1,0 +1,117 @@
+{% extends 'flipigames/base.html' %}
+
+{% block title %}Reglas del Torneo | FlipiGames{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-primary">
+            <i class="bi bi-trophy-fill"></i>
+            Reglas del Torneo Semanal
+        </h1>
+        <p class="lead text-muted">Compite durante toda la semana y conviértete en el campeón</p>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">
+                <i class="bi bi-list-check me-2"></i>
+                Normas de Participación
+            </h4>
+        </div>
+
+        <div class="card-body p-0">
+            <div class="list-group list-group-flush">
+                <div class="list-group-item d-flex align-items-start">
+                    <i class="bi bi-person-check-fill text-success fs-4 me-3"></i>
+                    <div>
+                        <h5 class="mb-1">Participación</h5>
+                        <p class="mb-0">Puede participar cualquier jugador registrado en la web</p>
+                    </div>
+                </div>
+
+                <div class="list-group-item d-flex align-items-start">
+                    <i class="bi bi-calendar-week text-primary fs-4 me-3"></i>
+                    <div>
+                        <h5 class="mb-1">Juegos de Lunes a Viernes</h5>
+                        <p class="mb-0">De Lunes a Viernes se podrá competir en 
+                            <strong>Ahorcado</strong> y 
+                            <strong>Piedra-Papel-Tijera-Lagarto-Spock</strong>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="list-group-item d-flex align-items-start">
+                    <i class="bi bi-star-fill text-warning fs-4 me-3"></i>
+                    <div>
+                        <h5 class="mb-1">Clasificación del Sábado</h5>
+                        <p class="mb-0">
+                            Los jugadores que ocupen los 10 primeros puestos al finalizar el viernes 
+                            podrán jugar a <strong>Adivina el Número</strong> el Sábado
+                        </p>
+                        <p class="mb-0">
+                            Jugadores con el mismo número de puntos ocuparán el mismo puesto
+                    </div>
+                </div>
+
+                <div class="list-group-item d-flex align-items-start">
+                    <i class="bi bi-award-fill text-success fs-4 me-3"></i>
+                    <div>
+                        <h5 class="mb-1">Campeón semanal</h5>
+                            <p class="mb-0">
+                                El ganador de <strong>Adivina el Número</strong> será el campeón semanal
+                            </p>
+                    </div>
+                </div>
+
+                <div class="list-group-item d-flex align-items-start">
+                    <i class="bi bi-arrow-repeat text-info fs-4 me-3"></i>
+                    <div>
+                        <h5 class="mb-1">Reinicio del Torneo</h5>
+                        <p class="mb-0">
+                            La clasificación y las puntuaciones se reinician al comenzar una nueva semana
+                        </p>
+                    </div>
+                </div>
+
+                <div class="list-group-item d-flex align-items-start">
+                    <i class="bi bi-person-badge-fill text-secondary fs-4 me-3"></i>
+                    <div>
+                        <h5 class="mb-1">Una cuenta por jugador</h5>
+                        <p class="mb-0">
+                            Cada jugadpr podrá participar únicamente con una cuenta.
+                            No está permitido utilizar cuentas duplicadas
+                        </p>
+                    </div>
+                </div>
+
+                <div class="list-group-item d-flex align-items-start">
+                    <i class="bi bi-shield-check text-danger fs-4 me-3"></i>
+                    <div>
+                        <h5 class="mb-1">Juego Limpio</h5>
+                        <p class="mb-0">
+                            Está prohibido utilizar trampas, programas externos o cualquier método que altere el resultado de las partidas
+                        </p>
+                    </div>
+                </div>
+            </div> <!-- list-group -->
+        </div> <!-- card-body-->
+    </div> <!-- card -->
+
+    <div class="alert alert-info mt-4 shadow-sm" role="alert">
+        <h5 class="alert-heading">
+            <i class="bi bi-info-circle-fill me-2"></i>
+            Importante
+        </h5>
+        <p class="mb-0">
+            La organización podrá revisar y resolver cualquier situación no contemplada en estas Reglas
+        </p>
+    </div>
+    <div class="text-center mt-4">
+        <a href="{% url 'torneo:torneo' %}" class="btn btn-primary">
+            <i class="bi bi-arrow-left me-2"></i>
+            Torneo
+        </a>
+    </div>
+</div> <!-- container -->
+{% endblock %}

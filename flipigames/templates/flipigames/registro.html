@@ -1,0 +1,22 @@
+{% extends "flipigames/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Registro | FlipiGames{% endblock %}
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card mt-4 form-card-custom border-0 shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title text-center">Crear una cuenta</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-primary w-100 mt-3">Registrarse</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+  </div>
+{% endblock %}

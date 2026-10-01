@@ -1,0 +1,503 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 101,
+    "fields": {
+      "username": "ana_prueba",
+      "email": "ana@example.com",
+      "password": "!",
+      "is_staff": false,
+      "is_active": true,
+      "is_superuser": false,
+      "last_login": null,
+      "date_joined": "2026-08-20T09:00:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 102,
+    "fields": {
+      "username": "bruno_prueba",
+      "email": "bruno@example.com",
+      "password": "!",
+      "is_staff": false,
+      "is_active": true,
+      "is_superuser": false,
+      "last_login": null,
+      "date_joined": "2026-08-22T10:00:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 103,
+    "fields": {
+      "username": "carla_prueba",
+      "email": "carla@example.com",
+      "password": "!",
+      "is_staff": false,
+      "is_active": true,
+      "is_superuser": false,
+      "last_login": null,
+      "date_joined": "2026-08-24T11:00:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 104,
+    "fields": {
+      "username": "diego_prueba",
+      "email": "diego@example.com",
+      "password": "!",
+      "is_staff": false,
+      "is_active": true,
+      "is_superuser": false,
+      "last_login": null,
+      "date_joined": "2026-08-26T12:00:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 105,
+    "fields": {
+      "username": "elena_prueba",
+      "email": "elena@example.com",
+      "password": "!",
+      "is_staff": false,
+      "is_active": true,
+      "is_superuser": false,
+      "last_login": null,
+      "date_joined": "2026-08-28T13:00:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 106,
+    "fields": {
+      "username": "fabian_prueba",
+      "email": "fabian@example.com",
+      "password": "!",
+      "is_staff": false,
+      "is_active": true,
+      "is_superuser": false,
+      "last_login": null,
+      "date_joined": "2026-08-30T14:00:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 107,
+    "fields": {
+      "username": "gabriela_prueba",
+      "email": "gabriela@example.com",
+      "password": "!",
+      "is_staff": false,
+      "is_active": true,
+      "is_superuser": false,
+      "last_login": null,
+      "date_joined": "2026-09-01T15:00:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 108,
+    "fields": {
+      "username": "hector_prueba",
+      "email": "hector@example.com",
+      "password": "!",
+      "is_staff": false,
+      "is_active": true,
+      "is_superuser": false,
+      "last_login": null,
+      "date_joined": "2026-09-03T16:00:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 109,
+    "fields": {
+      "username": "ines_prueba",
+      "email": "ines@example.com",
+      "password": "!",
+      "is_staff": false,
+      "is_active": true,
+      "is_superuser": false,
+      "last_login": null,
+      "date_joined": "2026-09-05T17:00:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 110,
+    "fields": {
+      "username": "jorge_prueba",
+      "email": "jorge@example.com",
+      "password": "!",
+      "is_staff": false,
+      "is_active": true,
+      "is_superuser": false,
+      "last_login": null,
+      "date_joined": "2026-09-07T18:00:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+
+  {
+    "model": "torneo.torneo",
+    "pk": 201,
+    "fields": {
+      "user": 101,
+      "semana": 36,
+      "anio": 2026,
+      "puntos_ahorcado": 12,
+      "puntos_piedra": 15,
+      "juegos_ahorcado": 4,
+      "juegos_piedra": 5,
+      "intentos_adivina": 3,
+      "tiempo_adivina": "20.50",
+      "juegos_adivina": 1,
+      "fecha_inscripcion": "2026-09-01T09:00:00Z"
+    }
+  },
+  {
+    "model": "torneo.torneo",
+    "pk": 202,
+    "fields": {
+      "user": 101,
+      "semana": 37,
+      "anio": 2026,
+      "puntos_ahorcado": 15,
+      "puntos_piedra": 18,
+      "juegos_ahorcado": 5,
+      "juegos_piedra": 6,
+      "intentos_adivina": 2,
+      "tiempo_adivina": "18.25",
+      "juegos_adivina": 1,
+      "fecha_inscripcion": "2026-09-08T09:00:00Z"
+    }
+  },
+  {
+    "model": "torneo.torneo",
+    "pk": 203,
+    "fields": {
+      "user": 102,
+      "semana": 36,
+      "anio": 2026,
+      "puntos_ahorcado": 9,
+      "puntos_piedra": 12,
+      "juegos_ahorcado": 3,
+      "juegos_piedra": 4,
+      "intentos_adivina": 0,
+      "tiempo_adivina": "0.00",
+      "juegos_adivina": 0,
+      "fecha_inscripcion": "2026-09-01T09:30:00Z"
+    }
+  },
+  {
+    "model": "torneo.torneo",
+    "pk": 204,
+    "fields": {
+      "user": 102,
+      "semana": 37,
+      "anio": 2026,
+      "puntos_ahorcado": 12,
+      "puntos_piedra": 9,
+      "juegos_ahorcado": 4,
+      "juegos_piedra": 3,
+      "intentos_adivina": 1,
+      "tiempo_adivina": "25.00",
+      "juegos_adivina": 1,
+      "fecha_inscripcion": "2026-09-08T09:30:00Z"
+    }
+  },
+  {
+    "model": "torneo.torneo",
+    "pk": 205,
+    "fields": {
+      "user": 103,
+      "semana": 36,
+      "anio": 2026,
+      "puntos_ahorcado": 6,
+      "puntos_piedra": 9,
+      "juegos_ahorcado": 2,
+      "juegos_piedra": 3,
+      "intentos_adivina": 0,
+      "tiempo_adivina": "0.00",
+      "juegos_adivina": 0,
+      "fecha_inscripcion": "2026-09-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "torneo.torneo",
+    "pk": 206,
+    "fields": {
+      "user": 103,
+      "semana": 37,
+      "anio": 2026,
+      "puntos_ahorcado": 9,
+      "puntos_piedra": 12,
+      "juegos_ahorcado": 3,
+      "juegos_piedra": 4,
+      "intentos_adivina": 2,
+      "tiempo_adivina": "30.75",
+      "juegos_adivina": 1,
+      "fecha_inscripcion": "2026-09-08T10:00:00Z"
+    }
+  },
+  {
+    "model": "torneo.torneo",
+    "pk": 207,
+    "fields": {
+      "user": 104,
+      "semana": 36,
+      "anio": 2026,
+      "puntos_ahorcado": 15,
+      "puntos_piedra": 15,
+      "juegos_ahorcado": 5,
+      "juegos_piedra": 5,
+      "intentos_adivina": 3,
+      "tiempo_adivina": "22.10",
+      "juegos_adivina": 1,
+      "fecha_inscripcion": "2026-09-01T10:30:00Z"
+    }
+  },
+  {
+    "model": "torneo.torneo",
+    "pk": 208,
+    "fields": {
+      "user": 104,
+      "semana": 37,
+      "anio": 2026,
+      "puntos_ahorcado": 6,
+      "puntos_piedra": 12,
+      "juegos_ahorcado": 2,
+      "juegos_piedra": 4,
+      "intentos_adivina": 0,
+      "tiempo_adivina": "0.00",
+      "juegos_adivina": 0,
+      "fecha_inscripcion": "2026-09-08T10:30:00Z"
+    }
+  },
+  {
+    "model": "torneo.torneo",
+    "pk": 209,
+    "fields": {
+      "user": 105,
+      "semana": 36,
+      "anio": 2026,
+      "puntos_ahorcado": 3,
+      "puntos_piedra": 6,
+      "juegos_ahorcado": 1,
+      "juegos_piedra": 2,
+      "intentos_adivina": 0,
+      "tiempo_adivina": "0.00",
+      "juegos_adivina": 0,
+      "fecha_inscripcion": "2026-09-01T11:00:00Z"
+    }
+  },
+  {
+    "model": "torneo.torneo",
+    "pk": 210,
+    "fields": {
+      "user": 105,
+      "semana": 37,
+      "anio": 2026,
+      "puntos_ahorcado": 9,
+      "puntos_piedra": 9,
+      "juegos_ahorcado": 3,
+      "juegos_piedra": 3,
+      "intentos_adivina": 1,
+      "tiempo_adivina": "19.80",
+      "juegos_adivina": 1,
+      "fecha_inscripcion": "2026-09-08T11:00:00Z"
+    }
+  },
+  {
+    "model": "torneo.torneo",
+    "pk": 211,
+    "fields": {
+      "user": 106,
+      "semana": 36,
+      "anio": 2026,
+      "puntos_ahorcado": 12,
+      "puntos_piedra": 6,
+      "juegos_ahorcado": 4,
+      "juegos_piedra": 2,
+      "intentos_adivina": 0,
+      "tiempo_adivina": "0.00",
+      "juegos_adivina": 0,
+      "fecha_inscripcion": "2026-09-01T11:30:00Z"
+    }
+  },
+  {
+    "model": "torneo.torneo",
+    "pk": 212,
+    "fields": {
+      "user": 106,
+      "semana": 37,
+      "anio": 2026,
+      "puntos_ahorcado": 15,
+      "puntos_piedra": 12,
+      "juegos_ahorcado": 5,
+      "juegos_piedra": 4,
+      "intentos_adivina": 2,
+      "tiempo_adivina": "21.40",
+      "juegos_adivina": 1,
+      "fecha_inscripcion": "2026-09-08T11:30:00Z"
+    }
+  },
+  {
+    "model": "torneo.torneo",
+    "pk": 213,
+    "fields": {
+      "user": 107,
+      "semana": 36,
+      "anio": 2026,
+      "puntos_ahorcado": 6,
+      "puntos_piedra": 6,
+      "juegos_ahorcado": 2,
+      "juegos_piedra": 2,
+      "intentos_adivina": 1,
+      "tiempo_adivina": "28.60",
+      "juegos_adivina": 1,
+      "fecha_inscripcion": "2026-09-01T12:00:00Z"
+    }
+  },
+  {
+    "model": "torneo.torneo",
+    "pk": 214,
+    "fields": {
+      "user": 107,
+      "semana": 37,
+      "anio": 2026,
+      "puntos_ahorcado": 12,
+      "puntos_piedra": 15,
+      "juegos_ahorcado": 4,
+      "juegos_piedra": 5,
+      "intentos_adivina": 0,
+      "tiempo_adivina": "0.00",
+      "juegos_adivina": 0,
+      "fecha_inscripcion": "2026-09-08T12:00:00Z"
+    }
+  },
+  {
+    "model": "torneo.torneo",
+    "pk": 215,
+    "fields": {
+      "user": 108,
+      "semana": 36,
+      "anio": 2026,
+      "puntos_ahorcado": 9,
+      "puntos_piedra": 3,
+      "juegos_ahorcado": 3,
+      "juegos_piedra": 1,
+      "intentos_adivina": 0,
+      "tiempo_adivina": "0.00",
+      "juegos_adivina": 0,
+      "fecha_inscripcion": "2026-09-01T12:30:00Z"
+    }
+  },
+  {
+    "model": "torneo.torneo",
+    "pk": 216,
+    "fields": {
+      "user": 108,
+      "semana": 37,
+      "anio": 2026,
+      "puntos_ahorcado": 6,
+      "puntos_piedra": 9,
+      "juegos_ahorcado": 2,
+      "juegos_piedra": 3,
+      "intentos_adivina": 1,
+      "tiempo_adivina": "24.30",
+      "juegos_adivina": 1,
+      "fecha_inscripcion": "2026-09-08T12:30:00Z"
+    }
+  },
+  {
+    "model": "torneo.torneo",
+    "pk": 217,
+    "fields": {
+      "user": 109,
+      "semana": 36,
+      "anio": 2026,
+      "puntos_ahorcado": 3,
+      "puntos_piedra": 3,
+      "juegos_ahorcado": 1,
+      "juegos_piedra": 1,
+      "intentos_adivina": 0,
+      "tiempo_adivina": "0.00",
+      "juegos_adivina": 0,
+      "fecha_inscripcion": "2026-09-01T13:00:00Z"
+    }
+  },
+  {
+    "model": "torneo.torneo",
+    "pk": 218,
+    "fields": {
+      "user": 109,
+      "semana": 37,
+      "anio": 2026,
+      "puntos_ahorcado": 9,
+      "puntos_piedra": 6,
+      "juegos_ahorcado": 3,
+      "juegos_piedra": 2,
+      "intentos_adivina": 0,
+      "tiempo_adivina": "0.00",
+      "juegos_adivina": 0,
+      "fecha_inscripcion": "2026-09-08T13:00:00Z"
+    }
+  },
+  {
+    "model": "torneo.torneo",
+    "pk": 219,
+    "fields": {
+      "user": 110,
+      "semana": 36,
+      "anio": 2026,
+      "puntos_ahorcado": 6,
+      "puntos_piedra": 9,
+      "juegos_ahorcado": 2,
+      "juegos_piedra": 3,
+      "intentos_adivina": 1,
+      "tiempo_adivina": "26.90",
+      "juegos_adivina": 1,
+      "fecha_inscripcion": "2026-09-01T13:30:00Z"
+    }
+  },
+  {
+    "model": "torneo.torneo",
+    "pk": 220,
+    "fields": {
+      "user": 110,
+      "semana": 37,
+      "anio": 2026,
+      "puntos_ahorcado": 12,
+      "puntos_piedra": 12,
+      "juegos_ahorcado": 4,
+      "juegos_piedra": 4,
+      "intentos_adivina": 0,
+      "tiempo_adivina": "0.00",
+      "juegos_adivina": 0,
+      "fecha_inscripcion": "2026-09-08T13:30:00Z"
+    }
+  }
+]

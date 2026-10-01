@@ -1,0 +1,135 @@
+{% extends "flipigames/base.html" %}
+{% load static %}
+
+{% block title %}Piedra-Papel-Tijera-Lagarto-Spock{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h1>Piedra-Papel-Tijera-Lagarto-Spock</h1>
+    {% if primera_vez %}
+        <!-- Pantalla de inicio -->
+        <img src="{% static 'imagenes/pptls/pptls.png' %}" alt="pptls" class="img-fluid my-4" style="max-height: 400px;">
+        <h1 class="text-white display-4 fw-bold">¡PIEDRA-PAPEL-TIJERA-LAGARTO-SPOCK!</h1>
+        <p class="text-success">¿Listo para empezar?</p>
+                
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary btn-lg">Jugar</button>
+        </form>
+    {% else %}
+        <!-- Pantalla del juego -->
+        <div class="row align-items-center mt-4">
+            <!-- Columna botones del jugador -->
+            <div class="col-md-3">
+                <h4 class="mb-3">Elige tu jugada</h4>
+                <!-- Formulario para los botones -->
+                <form method="post">
+                    {% csrf_token %}
+                    <!-- Fila 1 -->
+                    <div class="row justify-content-center g-2 mb-2">
+                        <div class="col-4">
+                            <button type="submit" name="eleccion" value="piedra" class="btn btn-outline-light p-1">
+                                <img src="{% static 'imagenes/pptls/piedra.png' %}" alt="Piedra" class="img-fluid">
+                            </button>
+                        </div>
+                        <div class="col-4">
+                            <button type="submit" name="eleccion" value="papel" class="btn btn-outline-light p-1">
+                                <img src="{% static 'imagenes/pptls/papel.png' %}" alt="Papel" class="img-fluid">
+                            </button>
+                        </div>
+                        <div class="col-4">
+                            <button type="submit" name="eleccion" value="tijera" class="btn btn-outline-light p-1">
+                            <img src="{% static 'imagenes/pptls/tijera.png' %}" alt="Tijera" class="img-fluid">
+                        </button>
+                        </div>
+                    </div>
+                    <!-- Fila 2 -->
+                     <div class="row justify-content-center g-2 mb-2">
+                        <div class="col-5">
+                            <button type="submit" name="eleccion" value="lagarto" class="btn btn-outline-light p-1">
+                                <img src="{% static 'imagenes/pptls/lagarto.png' %}" alt="Lagarto" class="img-fluid">
+                            </button>
+                        </div>
+                        <div class="col-5">
+                            <button type="submit" name="eleccion" value="spock" class="btn btn-outline-light p-1">
+                                <img src="{% static 'imagenes/pptls/spock.png' %}" alt="Spock" class="img-fluid">
+                            </button>
+                        </div>
+                     </div>
+                </form>
+            </div> <!-- Columna botones del jugador -->
+
+            <!-- Columna central -->
+            <div class="col-md-6">
+                <!-- Imagen general -->
+                <img src="{% static 'imagenes/pptls/pptls.png' %}" alt="pptls" class="img-fluid my-4" style="max-height: 400px;">
+            </div> 
+
+            <!-- Columna de información -->
+            <div class="col-md-3">
+                <div class="p-3 rounded" style="background-color: #acd9f8;">
+                    <h4 class="mb-3">Marcador</h4>
+                    <ul class="list-group list-group-flush text-start">
+                        <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                            Partidas: <span class="badge bg-secondary rounded-pill">{{ partidas_jugadas|default:"0" }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                            Victorias: <span class="badge bg-success rounded-pill">{{ victorias|default:"0" }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                            Derrotas: <span class="badge bg-danger rounded-pill">{{ derrotas|default:"0" }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                            Empates: <span class="badge bg-warning rounded-pill">{{ empates|default:"0" }}</span>
+                        </li>
+                    </ul>
+                    <!-- Marcador del Torneo -->
+                        {% if partida_torneo %}
+                            <div class="mt-4 p-3 rounded"  style="background-color: #e3f2fd;">
+                                <h5 class="mb-3 text-primary">Marcador del Torneo</h5>
+                                <ul class="list-group list-group-flush text-start">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                                        Partidas: <span class="badge bg-primary rounded-pill">{{ participacion_torneo.juegos_piedra|default:"0" }}</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                                        Puntos: <span class="badge bg-primary rounded-pill">{{ participacion_torneo.puntos_piedra|default:"0" }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        {% endif %}
+                </div> <!-- Div del marcador -->
+            </div> <!-- Columna de información -->
+        </div> <!-- Fila principal -->
+        {% if resultado %}
+            <div class="row justify-content-center align-items-center mt-5">
+                <!-- Columna para la elección del jugador -->
+                <div class="col-md-3 text-center">
+                    <h5>Tu elección</h5>
+                    <img src="{% static 'imagenes/pptls/'%}{{ eleccion_jugador }}.png"  alt="{{ eleccion_jugador }}" class="img-fluid p-1" style="max-width: 120px; border: 2px solid white;">
+                </div>
+
+                <!-- Columna para el resultado -->
+                <div class="col-md-2 text-center">
+                    <h2 class="fw-bold my-3">VS</h2>
+                    {% if resultado == "victoria" %}
+                        <h4 class="text-success fw-bold">¡GANASTE!</h4>
+                        <span>{{ mensaje }}</span>
+                    {% elif resultado == "derrota" %}
+                        <h4 class="text-danger fw-bold">¡PERDISTE!</h4>
+                        <span>{{ mensaje }}</span>
+                    {% else %}
+                        <h4 class="text-warning fw-bold">¡EMPATE!</h4>
+                    {% endif %}
+                </div>
+
+                <!-- Columna para la elección de la CPU -->
+                <div class="col-md-3 text-center">
+                    <h5>Mi elección</h5>
+                    <img src="{% static 'imagenes/pptls/' %}{{ eleccion_cpu }}.png" alt="{{ opcion_cpu }}" class="img-fluid p-1" style="max-width: 120px;">
+                </div>
+            </div> 
+        {% endif %}       
+        
+    {% endif %} <!-- Pantalla de Inicio -->
+</div> <!-- Div principal -->
+{% endblock %}

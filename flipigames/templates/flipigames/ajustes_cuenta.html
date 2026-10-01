@@ -1,0 +1,98 @@
+{% extends 'flipigames/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Mi Perfil | FlipiGames{% endblock %}
+
+{% block content %}
+    <div class="container my-4">
+        <div class="d-flex align-items-center mb-4">
+            <a href="{% url 'flipigames:perfil' %}" class="btn btn-secondary me-3">
+                <i class="bi bi-arrow-left"></i>Volver al Perfil
+            </a>
+            <h2 class="fw-bold mb-0">
+                <i class="bi bi-gear-fill me-2 text-primary"></i>
+                Ajustes Cuenta
+            </h2>
+        </div>
+        <!-- Ajustes de cuenta -->
+        <h3 class="fw-bold mb-3">
+            <i class="bi bi-gear-fill me-2 text-primary"></i>
+            Ajustes de Cuenta
+        </h3>
+        <div class="row g-4 mb-4">
+            <!-- Formulario para cambiar el email -->
+            <div class="col-md-6">
+                <div class="card form-card-custom border-0 shadow-h-100">
+                    <div class="card-body p-4">
+                        <h4 class="card-title fw-bold mb-3">
+                            <i class="bi bi-envelope-at me-2 text-primary"></i>
+                            Cambiar Email
+                        </h4>
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="accion" value="actualizar_email">{{ form_email|crispy }}
+                            <button type="submit" class="btn btn-primary w-100 mt-3" name="accion" value="actualizar_email">
+                                <i class="bi bi-save me-1"></i>
+                                Guardar Nuevo Correo    
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulario para cambiar la contraseña -->
+            <div class="col-md-6">
+                <div class="card form-card-custom border-0 shadow-h-100">
+                    <div class="card-body p-4">
+                        <h4 class="card-title fw-bold mb-3">
+                            <i class="bi bi-key-fill me-2 text-primary"></i>
+                            Cambiar Contraseña
+                        </h4>
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="accion" value="actualizar_password">{{ form_password|crispy }}
+                            <button type="submit" class="btn btn-primary w-100 mt-3" name="accion" value="actualizar_password">
+                                <i class="bi bi-shield-check me-1"></i>
+                                Actualizar Contraseña
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Eliminar Cuenta -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card border-danger shadow-sm">
+                        <div class="card-header bg-danger text-white">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                Eliminar Cuenta
+                            </h5>
+                        </div>
+                        <div class="card-body p-4 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
+                            <div>
+                                <h5 class="fw-bold text-danger mb-1">Eliminar esta cuenta</h5>
+                                <p class="text-muted mb-0">Una vez que elimines tu cuenta no podrás recuperar tus estadísticas ni tu progreso en el torneo</p>
+                            </div>
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="mb-2">
+                                    <input type="password" name="password" class="form-control form-control-sm" placeholder="Introduce tu Contraseña" required>
+                                </div>
+                                <input type="hidden" name="accion" value="borrar_cuenta">
+                                <button type="submit" class="btn btn-outline-danger px-4 py-2"
+                                    name="accion" value="borrar_cuenta"
+                                    onclick="return confirm('¿Estás seguro de que deseas eliminar tu cuenta permanentemente? Esta acción no se puede deshacer');">
+                                    <i class="bi bi-trash-fill me-1"></i>
+                                    Eliminar Cuenta
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- Ajustes de Cuenta -->
+
+{% endblock %}

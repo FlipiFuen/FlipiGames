@@ -1,0 +1,309 @@
+{% load static %}
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <!-- Iconos de Bootstrap -->
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <title>{% block title %}FlipiGames{% endblock %}</title>
+
+    <style>
+        .navbar{
+            padding-top: 1.7rem;
+        padding-bottom: 1.5rem;
+        background-color: #8ec5ec;
+        }
+        /* Clase para el fondo de las tarjetas de formulario */
+        .form-card-custom{
+            background-color: #e3f2fd;
+        }
+        body{
+            background-image: url("{% static 'imagenes/fondo.png' %}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        /* Estilos para el icono de mostrar/ocultar contraseña */
+        .password-input-wrapper {
+        position: relative;
+        }
+
+        .password-input-wrapper input {
+            padding-right: 2.75rem;
+        }
+
+        .password-toggle-icon {
+            position: absolute;
+            top: 50%;
+            right: 0.75rem;
+            z-index: 2;
+            width: 2rem;
+            height: 2rem;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            color: #6c757d;
+            cursor: pointer;
+            transform: translateY(-50%);
+        }
+
+        .password-toggle-icon:hover,
+        .password-toggle-icon:focus {
+            color: #212529;
+        }
+
+        .password-toggle-icon:focus-visible {
+            outline: 2px solid #0d6efd;
+            outline-offset: 2px;
+        }
+    </style>
+
+    <!-- Bloque donde las plantillas hijas pueden insertar su propio css -->
+    {% block extra_css %}{% endblock %}
+
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container d-flex justify-content-between align-items-center">
+             <div class="d-flex align-items-center">
+                <a class="navbar-brand d-flex align-items-center" href="{% url 'flipigames:home' %}">FlipiGames</a>
+                 {% if user.is_authenticated %}
+                    <!-- Selector de juegos para usuarios autenticados -->
+                    <div class="nav-item dropdown mx-3">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Juegos">
+                            <i class="bi bi-joystick me-1"></i>
+                            Juegos
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'juegos:ahorcado' %}">
+                                <i class="bi bi-person-arms-up me-2"></i>Ahorcado</a>
+                            </li>
+                            <li><a class="dropdown-item" href="{% url 'juegos:pptls' %}">
+                                <i class="bi bi-hand-thumbs-up-fill me-2"></i>Piedra-Papel-Tijera-Lagarto-Spock</a>
+                            </li>
+                            <li><a class="dropdown-item" href="{% url 'juegos:adivina_numero' %}">
+                                <i class="bi bi-question-circle me-2"></i>Adivina el Número</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Selector opciones del torneo -->
+                    <div class="nav-item dropdown mx-3">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Torneo">
+                            <i class="bi bi-trophy-fill me-1"></i>
+                            Torneo
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'torneo:torneo' %}">Página Principal</a></li>
+                            <li><a class="dropdown-item" href="{% url 'torneo:reglas_torneo' %}">
+                                <i class="bi bi-info-circle me-2"></i>Reglas del Torneo</a>
+                            </li>
+                            {% if participante_actual %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'juegos:ahorcado_modo' modo_juego='torneo' %}">
+                                    <i class="bi bi-person-arms-up me-2"></i>Jugar Ahorcado</a>
+                                </li>
+                                <li><a class="dropdown-item" href="{% url 'juegos:pptls_modo' modo_juego='torneo' %}">
+                                    <i class="bi bi-hand-thumbs-up-fill me-2"></i>Jugar Piedra-Papel-Tijera_Lagarto-Spock</a>
+                                </li>
+                                <li><a class="dropdown-item" href="{% url 'juegos:adivina_numero_modo' modo_juego='torneo' %}">
+                                    <i class="bi bi-question-circle me-2"></i>Jugar Adivina el Número</a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'torneo:estadisticas_torneo' %}">
+                                    <i class="bi bi-bar-chart-line-fill me-2"></i>Estadísticas</a>
+                                </li>
+                            {% else %}
+                                <li><a class="dropdown-item" href="{% url 'torneo:registro_torneo' %}">
+                                    <i class="bi bi-person-plus me-2"></i>Registrarse</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                {% endif %}
+                <!-- colocamos una imagen del logo-->
+                <img src="{% static 'imagenes/logo.png' %}" 
+                    alt="Logo"
+                    style="height:40px; width: auto; margin-right: 10px;">
+            </div>
+    
+            <!-- Botón para menu desplegable en pantallas pequeñas -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <!-- Enlaces visibles para todos -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'flipigames:home' %}">
+                            <i class="bi bi-house me-1"></i>Inicio
+                        </a>
+                    </li>
+
+                    <!-- Enlaces para usuarios autenticados -->
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <span class="nav-link fw-bold" style="color: #76a00c;">
+                                <i class="bi bi-person-check me-1"></i>
+                                Bienvenid@ {{ user.username }}</span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'flipigames:perfil' %}">
+                                <i class="bi bi-person-circle me-1"></i>Mi Perfil</a>
+                        </li>
+                        {% if user.is_superuser %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'admin:index' %}"><i class="bi bi-gear-fill me-1"></i>Admin</a>
+                        </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <form action="{% url "flipigames:logout" %}" method="post" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-danger btn-sm">
+                                    <i class="bi bi-box-arrow-right me-1"></i>Cerrar sesión</button>
+                            </form>
+                        </li>
+                    {% else%}
+                        <!-- Enlaces para usuarios no autenticados -->
+                         <li class="nav-item">
+                            <a class="nav-link" href="{% url 'flipigames:registro' %}">
+                                <i class="bi bi-person-plus me-1"></i>Registro</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-primary text-white btn-sm" href="{% url 'flipigames:login' %}">
+                                <i class="bi bi-box-arrow-in-right me-1"></i>Iniciar sesión</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>  
+        </div>
+    </nav>
+
+    <main class="container mt-4">
+        {% if messages %}
+            <div class="messages">
+                {% for mensaje in messages %}
+                    <div class="alert alert-{{ mensaje.tags }} alert-dismissible fade show bg-info fs-5" role="alert">
+                        {{ mensaje }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Bootstrap JS Bundle (necesario para componentes interactivos como el menú desplegable) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <!-- script para mostrar/ocultar contraseñas -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Busca todos los campos de contraseña en la página
+        const passwordInputs = document.querySelectorAll('input[type="password"]');
+
+        passwordInputs.forEach(input => {
+            // El contenedor del input generado por crispy-forms es el padre del padre.
+            // Necesitamos posicionamiento relativo en él para colocar el icono.
+            const wrapper = document.createElement('div');
+            wrapper.className = 'password-input-wrapper';
+
+            input.parentNode.insertBefore(wrapper, input);
+            wrapper.appendChild(input);
+
+                // Crea el icono
+                const toggleIcon = document.createElement('button');
+                toggleIcon.type = 'button';
+                toggleIcon.classList.add('bi', 'bi-eye-slash', 'password-toggle-icon');
+                toggleIcon.setAttribute('aria-label', 'Mostrar contraseña');
+                toggleIcon.setAttribute('title', 'Mostrar contraseña');
+                toggleIcon.setAttribute('aria-pressed', 'false');
+                
+                // Añade el icono dentro del contenedor
+                wrapper.appendChild(toggleIcon);
+
+                // Añade el evento de click al icono
+                toggleIcon.addEventListener('click', function () {
+                    const mostrar = input.type === 'password';
+
+                    input.type = mostrar ? 'text' : 'password';
+
+                    this.classList.toggle('bi-eye', mostrar);
+                    this.classList.toggle('bi-eye-slash', !mostrar);
+
+                    const etiqueta = mostrar ? 'Ocultar contraseña' : 'Mostrar contraseña';
+                    this.setAttribute('aria-label', etiqueta);
+                    this.setAttribute('title', etiqueta);
+                    this.setAttribute('aria-pressed', String(mostrar));
+                });
+        });
+    });
+    </script>
+
+    <!-- script para el cronómetro en tiempo real -->
+    <script>
+    // Función para iniciar un cronómetro en tiempo real con formato mm:ss.d
+    function iniciarCronometro(startTime, displayElementId) {
+        const display = document.getElementById(displayElementId);
+        if (!display || startTime === undefined || startTime === null) {
+            return; // No hacemos nada si no hay elemento o tiempo de inicio
+        }
+
+        // Aseguramos que startTime sea número y detectamos si viene en segundos
+        let startNum = Number(startTime);
+        if (isNaN(startNum)) return;
+        // Si parece un timestamp en segundos (menos de 1e12), lo convertimos a ms
+        if (startNum < 1e12) startNum = startNum * 1000;
+
+        // Función que actualiza la visualización (se invoca inmediatamente y cada segundo)
+        function actualizar() {
+            try {
+                const ahora = Date.now();
+                const transcurrido = ahora - startNum;
+
+                const minutos = Math.floor((transcurrido % (1000 * 60 * 60)) / (1000 * 60));
+                const segundos = Math.floor((transcurrido % (1000 * 60)) / 1000);
+                const centesimas = Math.floor((transcurrido % 1000) / 10);
+
+                const minutosStr = String(minutos).padStart(2, '0');
+                const segundosStr = String(segundos).padStart(2, '0');
+                const centesimasStr = String(centesimas).padStart(2, '0');
+
+                display.textContent = `${minutosStr}:${segundosStr}.${centesimasStr}`;
+                
+            } catch (err) {
+                console.error('Error en actualizar cronómetro:', err);
+            }
+        }
+
+        // Si ya hay un intervalo guardado en el elemento, lo limpiamos para evitar duplicados
+        if (display.dataset && display.dataset.cronInterval) {
+            try { clearInterval(Number(display.dataset.cronInterval)); } catch (e) {}
+        }
+
+        // Actualizamos inmediatamente y luego cada 100 ms para mostrar decimas de segundo
+        actualizar();
+        const intervalo = setInterval(actualizar, 100);
+        if (display.dataset) display.dataset.cronInterval = String(intervalo);
+        
+        // Devolver el id del intervalo por si necesita cancelarse desde fuera
+        return intervalo;
+    }
+    </script>
+
+    {% block extra_js %}{% endblock %}
+    
+  </body>
+
+</html>
